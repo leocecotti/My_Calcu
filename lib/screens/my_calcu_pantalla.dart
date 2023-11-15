@@ -8,7 +8,11 @@ import 'package:my_calcu/widgets/calcu_boton.dart';
 
 
 
+
+
 class CalculatorScreen extends StatelessWidget {
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,20 @@ class CalculatorScreen extends StatelessWidget {
           color: Colors.red,
           child: Column(
             children: [
-              
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.history),
+                    iconSize: 40,
+                    onPressed: ()
+                    {
+                      List<String> colorList = ['aaa','bbb','ccc'];
+                      showAlertDialog(context, colorList, Colors.red);
+                    } ,
+                  ),
+                ],
+              ),
+
               Expanded(
                 child: Container(),
               ),
@@ -139,7 +156,9 @@ class CalculatorScreen extends StatelessWidget {
                   CalculatorButton( 
                     text: '=',
                     bgColor: Color(0xffF0A23B ),
-                    onPressed: () => calculatorBloc.add(ResultadoCalcu()),
+                    onPressed: () {
+                      calculatorBloc.add(ResultadoCalcu());
+                      },
                   ),
                 ],
               ),
@@ -149,4 +168,52 @@ class CalculatorScreen extends StatelessWidget {
       )
    );
   }
+
+  showAlertDialog(BuildContext context, List<String> imagenes, Color color) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Historial Operaciones", textAlign: TextAlign.left),
+      content: SizedBox(
+          width: double.maxFinite,
+          child:Container(
+            child:  Container(
+                width: double.infinity,
+                height: double.infinity,
+                child:
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                ListView.builder(
+                shrinkWrap: true,
+                  itemCount: imagenes.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Container(
+                          child: Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                            child: Text(imagenes[index]),)
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+
+
+                      },
+                    );
+                  },
+                ),
+  ]),
+          ),
+      ),
+    ),
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 }
