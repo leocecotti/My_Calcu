@@ -6,13 +6,7 @@ import 'package:my_calcu/bloc/calcu/calculator_bloc.dart';
 import 'package:my_calcu/widgets/resultado_labels.dart';
 import 'package:my_calcu/widgets/calcu_boton.dart';
 
-
-
-
-
 class CalculatorScreen extends StatelessWidget {
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +17,7 @@ class CalculatorScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric( horizontal: 10 ),
-          color: Colors.red,
+          color: Colors.blueGrey,
           child: Column(
             children: [
               Row(
@@ -33,8 +27,7 @@ class CalculatorScreen extends StatelessWidget {
                     iconSize: 40,
                     onPressed: ()
                     {
-                      List<String> colorList = ['aaa','bbb','ccc'];
-                      showAlertDialog(context, colorList, Colors.red);
+                      showAlertDialog(context, CalculatorState.operaciones, Colors.red, calculatorBloc);
                     } ,
                   ),
                 ],
@@ -50,7 +43,7 @@ class CalculatorScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CalculatorButton( 
-                    text: 'AC',
+                    text: 'CE',
                     bgColor: Color(0xffA5A5A5 ),
                     onPressed: () => calculatorBloc.add( ResetAC() )  ,
                   ),
@@ -60,7 +53,7 @@ class CalculatorScreen extends StatelessWidget {
                     onPressed: () => calculatorBloc.add(CambiarNegativoPositivo()),
                   ),
                   CalculatorButton( 
-                    text: 'del',
+                    text: '<-',
                     bgColor: Color(0xffA5A5A5 ),
                     onPressed: () => calculatorBloc.add(BorrarUltimoNumero()),
                   ),
@@ -157,7 +150,7 @@ class CalculatorScreen extends StatelessWidget {
                     text: '=',
                     bgColor: Color(0xffF0A23B ),
                     onPressed: () {
-                      calculatorBloc.add(ResultadoCalcu());
+                      calculatorBloc.add(ResultadoCalcu(CalculatorState.selcectHistorial));
                       },
                   ),
                 ],
@@ -169,16 +162,35 @@ class CalculatorScreen extends StatelessWidget {
    );
   }
 
-  showAlertDialog(BuildContext context, List<String> imagenes, Color color) {
+  showAlertDialog(BuildContext context, List<String> imagenes, Color color, CalculatorBloc calculatorBloc) {
+    Widget salirButton = ElevatedButton(
+        onPressed: (){
+
+          Navigator.pop(context);
+
+        },
+
+        style: ElevatedButton.styleFrom(
+          primary: Colors.orange,
+          alignment: Alignment.center,
+            fixedSize: Size.infinite,
+          minimumSize: Size.fromHeight(40)
+        ),
+        child:Text("Salir", style: TextStyle(fontSize: 16))
+    );
+
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.blueGrey,
       title: Text("Historial Operaciones", textAlign: TextAlign.left),
       content: SizedBox(
           width: double.maxFinite,
           child:Container(
+            color: Colors.blueGrey,
             child:  Container(
                 width: double.infinity,
                 height: double.infinity,
+              color: Colors.blueGrey,
                 child:
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -188,15 +200,33 @@ class CalculatorScreen extends StatelessWidget {
                 shrinkWrap: true,
                   itemCount: imagenes.length,
                   itemBuilder: (BuildContext context, int index) {
+                    List<String> item = imagenes[index].split(',');
                     return ListTile(
                       title: Container(
                           child: Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                            child: Text(imagenes[index]),)
+                            child: Text(
+                                item[0] + item[1] + item[2] + item[3] + item[4],
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          )
                       ),
                       onTap: () {
+
+                        CalculatorState.selcectHistorial = true;
+
+                        List<String> strarray = imagenes[index].split(',');
+
+                        calculatorBloc.add( ResetAC() );
+
+                        calculatorBloc.add( OperacionHistorial(
+                                                          strarray[0],
+                                                          strarray[2],
+                                                          strarray[1].toString().trim(),
+                                                          strarray[4]) );
+
+                        calculatorBloc.add( ResultadoCalcu(CalculatorState.selcectHistorial) );
+
                         Navigator.pop(context);
-
-
                       },
                     );
                   },
@@ -205,9 +235,13 @@ class CalculatorScreen extends StatelessWidget {
           ),
       ),
     ),
+      actions: [
+        salirButton
+      ],
     );
 
     // show the dialog
+
     showDialog(
       context: context,
       builder: (BuildContext context) {

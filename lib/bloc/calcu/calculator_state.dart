@@ -6,6 +6,9 @@ class CalculatorState {
   final String firstNumber;
   final String secondNumber;
   final String operation;
+  static String operacionTxt = '';
+  static List <String> operaciones = List.empty(growable: true);
+  static bool selcectHistorial = false;
 
   CalculatorState({
     this.mathResult = '0',
@@ -26,5 +29,7 @@ class CalculatorState {
     secondNumber: secondNumber ?? this.secondNumber,
     operation: operation ?? this.operation,
   );
+
+
 }
 

@@ -20,4 +20,17 @@ class OperacionCalc extends CalculatorEvent{
   OperacionCalc(this.operation);
 }
 
-class ResultadoCalcu extends CalculatorEvent{}
+class OperacionHistorial extends CalculatorEvent{
+  final String num1;
+  final String num2;
+  final String operation;
+  final String res;
+
+  OperacionHistorial(this.num1, this.num2, this.operation, this.res);
+}
+
+class ResultadoCalcu extends CalculatorEvent{
+  bool selectHistorial = false;
+
+  ResultadoCalcu(this.selectHistorial);
+}

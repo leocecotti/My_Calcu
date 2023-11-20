@@ -48,16 +48,24 @@ class CalculatorBloc extends Bloc<CalculatorEvent, CalculatorState> {
     }
     //Operacion Division
     else if (event is OperacionCalc) {
+        yield state.copyWith(
+            firstNumber: state.mathResult,
+            mathResult: '0',
+            operation: event.operation,
+            secondNumber: '0'
+        );
+    }
+    else if (event is OperacionHistorial) {
       yield state.copyWith(
-          firstNumber: state.mathResult,
-          mathResult: '0',
+          firstNumber: event.num1,
+          mathResult: event.res,
           operation: event.operation,
-          secondNumber: '0'
+          secondNumber: event.num2
       );
     }
-    //Operacion Division
+    //Resultado
     else if (event is ResultadoCalcu) {
-      yield* _calculaResultado();
+        yield* _calculaResultado(event.selectHistorial);
     }
   }
 
@@ -69,38 +77,64 @@ class CalculatorBloc extends Bloc<CalculatorEvent, CalculatorState> {
           secondNumber: '',
           operation: ''
       );
+
     }
 
-  Stream<CalculatorState> _calculaResultado() async*
+
+  Stream<CalculatorState> _calculaResultado(bool selectHistorial) async*
   {
     final double num1 = double.parse(state.firstNumber);
-    final double num2 = double.parse(state.mathResult);
+
+     double  secondNumber= 0;
+    if(selectHistorial)
+      secondNumber = double.parse(state.secondNumber);
+    else
+      secondNumber = double.parse(state.mathResult);
+
+    final double num2 = secondNumber;
 
     switch(state.operation)
     {
       case '+':
-        yield state.copyWith(
-          secondNumber: state.mathResult,
-          mathResult: '${ num1 + num2 }'
-        );
+        if(selectHistorial)
+          yield state.copyWith(
+              secondNumber: state.secondNumber,
+              mathResult: '${ num1 + num2 }'
+          );
+        else
+          yield state.copyWith(
+            secondNumber: state.mathResult,
+            mathResult: '${ num1 + num2 }'
+          );
+
+        CalculatorState.selcectHistorial = false;
+        print("selectHisto: ${selectHistorial}");
+        CalculatorState.operacionTxt = state.firstNumber + ',' + ' + ' + ',' + state.secondNumber + ',' + ' = ' + ',' + state.mathResult;
+        CalculatorState.operaciones.add(CalculatorState.operacionTxt);
       break;
       case '-':
         yield state.copyWith(
             secondNumber: state.mathResult,
             mathResult: '${ num1 - num2 }'
         );
+        CalculatorState.operacionTxt = state.firstNumber + ',' + ' - ' + ',' + state.secondNumber + ',' + ' = ' + ',' + state.mathResult;
+        CalculatorState.operaciones.add(CalculatorState.operacionTxt);
       break;
       case 'x':
         yield state.copyWith(
             secondNumber: state.mathResult,
             mathResult: '${ num1 * num2 }'
         );
+        CalculatorState.operacionTxt = state.firstNumber + ',' + ' * ' + ',' + state.secondNumber + ',' + ' = ' + ',' + state.mathResult;
+        CalculatorState.operaciones.add(CalculatorState.operacionTxt);
       break;
       case '/':
         yield state.copyWith(
             secondNumber: state.mathResult,
             mathResult: '${ num1 / num2 }'
         );
+        CalculatorState.operacionTxt = state.firstNumber + ',' + ' / ' + ',' + state.secondNumber + ',' + ' = ' + ',' + state.mathResult;
+        CalculatorState.operaciones.add(CalculatorState.operacionTxt);
       break;
       default:
         yield state;
