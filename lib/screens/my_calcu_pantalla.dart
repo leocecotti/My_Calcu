@@ -20,18 +20,33 @@ class CalculatorScreen extends StatelessWidget {
           color: Colors.blueGrey,
           child: Column(
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.history),
-                    iconSize: 40,
-                    onPressed: ()
-                    {
-                      showAlertDialog(context, CalculatorState.operaciones, Colors.red, calculatorBloc);
-                    } ,
-                  ),
-                ],
+          Container(
+          color: Colors.black54,
+          child:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: Icon(Icons.history),
+                iconSize: 40,
+                onPressed: ()
+                {
+                  showAlertDialog(context, CalculatorState.operaciones, Colors.red, calculatorBloc);
+                } ,
               ),
+              Text("The Calcu", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+              IconButton(
+                icon: Image.asset("assets/pro.png"),
+                iconSize: 40,
+                onPressed: ()
+                {
+                  showAlertDialog(context, CalculatorState.operaciones, Colors.red, calculatorBloc);
+                } ,
+              ),
+            ],
+          ),
+          ),
+
 
               Expanded(
                 child: Container(),
@@ -182,7 +197,15 @@ class CalculatorScreen extends StatelessWidget {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       backgroundColor: Colors.blueGrey,
-      title: Text("Historial Operaciones", textAlign: TextAlign.left),
+      title: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Icon(Icons.history, size: 35,),
+          ),
+          Text("Operaciones", textAlign: TextAlign.left, style: TextStyle(fontSize: 22),)
+        ],
+      ),
       content: SizedBox(
           width: double.maxFinite,
           child:Container(
@@ -193,44 +216,47 @@ class CalculatorScreen extends StatelessWidget {
               color: Colors.blueGrey,
                 child:
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize:MainAxisSize.min,
                   children: <Widget>[
-                ListView.builder(
-                shrinkWrap: true,
-                  itemCount: imagenes.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    List<String> item = imagenes[index].split(',');
-                    return ListTile(
-                      title: Container(
-                          child: Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                            child: Text(
-                                item[0] + item[1] + item[2] + item[3] + item[4],
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          )
-                      ),
-                      onTap: () {
+                    Flexible(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: imagenes.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            List<String> item = imagenes[index].split(',');
+                            return ListTile(
+                              title: Container(
+                                  child: Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                                    child:
+                                    Text(
+                                      item[0] + item[1] + item[2] + item[3] + item[4],
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  )
+                              ),
+                              onTap: () {
 
-                        CalculatorState.selcectHistorial = true;
+                                CalculatorState.selcectHistorial = true;
 
-                        List<String> strarray = imagenes[index].split(',');
+                                List<String> strarray = imagenes[index].split(',');
 
-                        calculatorBloc.add( ResetAC() );
+                                calculatorBloc.add( ResetAC() );
 
-                        calculatorBloc.add( OperacionHistorial(
-                                                          strarray[0],
-                                                          strarray[2],
-                                                          strarray[1].toString().trim(),
-                                                          strarray[4]) );
+                                calculatorBloc.add( OperacionHistorial(
+                                    strarray[0],
+                                    strarray[2],
+                                    strarray[1].toString().trim(),
+                                    strarray[4]) );
 
-                        calculatorBloc.add( ResultadoCalcu(CalculatorState.selcectHistorial) );
+                                calculatorBloc.add( ResultadoCalcu(CalculatorState.selcectHistorial) );
 
-                        Navigator.pop(context);
-                      },
-                    );
-                  },
-                ),
+                                Navigator.pop(context);
+                              },
+                            );
+                          },
+                        ),
+                    ),
+
   ]),
           ),
       ),
