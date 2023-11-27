@@ -6,7 +6,13 @@ import 'package:my_calcu/bloc/calcu/calculator_bloc.dart';
 import 'package:my_calcu/widgets/resultado_labels.dart';
 import 'package:my_calcu/widgets/calcu_boton.dart';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
+
 class CalculatorScreen extends StatelessWidget {
+
+  final Audio audio = Audio('assets/audios/messi.mp3');
+  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer();
+  bool reproduce = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,15 @@ class CalculatorScreen extends StatelessWidget {
                 iconSize: 40,
                 onPressed: ()
                 {
-                  showAlertDialog(context, CalculatorState.operaciones, Colors.red, calculatorBloc);
+                  if(reproduce == false) {
+                    reproduce = true;
+                    _assetsAudioPlayer = AssetsAudioPlayer();
+                    _assetsAudioPlayer.open(audio);
+                    _assetsAudioPlayer.play();
+                  }
+                  else
+                      reproduce = false;
+
                 } ,
               ),
             ],
@@ -178,6 +192,7 @@ class CalculatorScreen extends StatelessWidget {
   }
 
   showAlertDialog(BuildContext context, List<String> imagenes, Color color, CalculatorBloc calculatorBloc) {
+
     Widget salirButton = ElevatedButton(
         onPressed: (){
 
@@ -275,5 +290,4 @@ class CalculatorScreen extends StatelessWidget {
       },
     );
   }
-
 }
