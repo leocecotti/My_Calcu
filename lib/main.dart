@@ -1,4 +1,4 @@
-import 'package:my_calcu/bloc/calcu/calculator_bloc.dart';
+import 'package:my_calcu/bloc/calcu/calculadora_bloc.dart';
 import 'package:my_calcu/screens/my_calcu_pantalla.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +12,7 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider<CalculatorBloc>(create: ( _ ) => CalculatorBloc() )
+          BlocProvider<CalculadoraBloc>(create: ( _ ) => CalculadoraBloc() )
         ],
         child: MyApp()
     );

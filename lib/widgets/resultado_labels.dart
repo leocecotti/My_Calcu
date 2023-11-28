@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:my_calcu/bloc/calcu/calculator_bloc.dart';
+import 'package:my_calcu/bloc/calcu/calculadora_bloc.dart';
 
 import 'linea_separadora.dart';
 import 'resultado_principal.dart';
@@ -10,28 +10,28 @@ import 'resultado_secundario.dart';
 class ResultsLabels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CalculatorBloc, CalculatorState>(
+    return BlocBuilder<CalculadoraBloc, CalculadoraEstado>(
       builder: (context, state) {
 
-        if(state.firstNumber == '0' && state.secondNumber == '0')
+        if(state.primerNum == '0' && state.segundoNum == '0')
         {
-          return MainResultText(text: state.mathResult.endsWith('.0')
-              ? state.mathResult.substring(0, state.mathResult.length -2)
-              : state.mathResult
+          return MainResultText(text: state.resultado.endsWith('.0')
+              ? state.resultado.substring(0, state.resultado.length -2)
+              : state.resultado
           );
         }
 
         return Column(
           children: [
-            SubResult(text: state.firstNumber ),
-            SubResult(text: state.operation ),
-            SubResult(text: state.secondNumber.endsWith('.0')
-        ? state.secondNumber.substring(0, state.secondNumber.length -2)
-            : state.secondNumber ),
+            SubResult(text: state.primerNum ),
+            SubResult(text: state.operacion ),
+            SubResult(text: state.segundoNum.endsWith('.0')
+        ? state.segundoNum.substring(0, state.segundoNum.length -2)
+            : state.segundoNum ),
             LineSeparator(),
-            MainResultText(text: state.mathResult.endsWith('.0')
-            ? state.mathResult.substring(0, state.mathResult.length -2)
-            : state.mathResult),
+            MainResultText(text: state.resultado.endsWith('.0')
+            ? state.resultado.substring(0, state.resultado.length -2)
+            : state.resultado),
           ],
         );
       },

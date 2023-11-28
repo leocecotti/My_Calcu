@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:my_calcu/bloc/calcu/calculator_bloc.dart';
+import 'package:my_calcu/bloc/calcu/calculadora_bloc.dart';
 
 import 'package:my_calcu/widgets/resultado_labels.dart';
 import 'package:my_calcu/widgets/calcu_boton.dart';
@@ -17,7 +17,7 @@ class CalculatorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final calculatorBloc = BlocProvider.of<CalculatorBloc>(context);
+    final calculatorBloc = BlocProvider.of<CalculadoraBloc>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -37,7 +37,34 @@ class CalculatorScreen extends StatelessWidget {
                 iconSize: 40,
                 onPressed: ()
                 {
-                  showAlertDialog(context, CalculatorState.operaciones, Colors.red, calculatorBloc);
+                  if(CalculadoraEstado.operaciones.length > 0)
+                    showAlertDialog(context, CalculadoraEstado.operaciones, Colors.red, calculatorBloc);
+                  else
+                    showDialog(context: context, builder: (ctx) => AlertDialog(
+                      title:  Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Icon(Icons.history, size: 35,),
+                          ),
+                          Text("Operaciones", textAlign: TextAlign.left, style: TextStyle(fontSize: 20),)
+                        ],
+                      ),
+                      content: const Text("No hay operaciones realizadas."),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          child: Container(
+                            color: Colors.orange,
+                            padding: const EdgeInsets.all(14),
+                            child: const Text("Aceptar", style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    );
                 } ,
               ),
               Text("The Calcu", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
@@ -179,7 +206,7 @@ class CalculatorScreen extends StatelessWidget {
                     text: '=',
                     bgColor: Color(0xffF0A23B ),
                     onPressed: () {
-                      calculatorBloc.add(ResultadoCalcu(CalculatorState.selcectHistorial));
+                      calculatorBloc.add(ResultadoCalcu(CalculadoraEstado.selcectHistorial));
                       },
                   ),
                 ],
@@ -191,7 +218,7 @@ class CalculatorScreen extends StatelessWidget {
    );
   }
 
-  showAlertDialog(BuildContext context, List<String> imagenes, Color color, CalculatorBloc calculatorBloc) {
+  showAlertDialog(BuildContext context, List<String> imagenes, Color color, CalculadoraBloc calculatorBloc) {
 
     Widget salirButton = ElevatedButton(
         onPressed: (){
@@ -251,7 +278,7 @@ class CalculatorScreen extends StatelessWidget {
                               ),
                               onTap: () {
 
-                                CalculatorState.selcectHistorial = true;
+                                CalculadoraEstado.selcectHistorial = true;
 
                                 List<String> strarray = imagenes[index].split(',');
 
@@ -263,7 +290,7 @@ class CalculatorScreen extends StatelessWidget {
                                     strarray[1].toString().trim(),
                                     strarray[4]) );
 
-                                calculatorBloc.add( ResultadoCalcu(CalculatorState.selcectHistorial) );
+                                calculatorBloc.add( ResultadoCalcu(CalculadoraEstado.selcectHistorial) );
 
                                 Navigator.pop(context);
                               },

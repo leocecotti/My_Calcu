@@ -1,35 +1,35 @@
-part of 'calculator_bloc.dart';
+part of 'calculadora_bloc.dart';
 
 @immutable
-abstract class CalculatorEvent {}
+abstract class CalculadoraEventos {}
 
-class ResetAC extends CalculatorEvent{}
+class ResetAC extends CalculadoraEventos{}
 
-class AddNumber extends CalculatorEvent{
+class AddNumber extends CalculadoraEventos{
   final String number;
   AddNumber(this.number);
 }
 
-class CambiarNegativoPositivo extends CalculatorEvent{}
+class CambiarNegativoPositivo extends CalculadoraEventos{}
 
-class BorrarUltimoNumero extends CalculatorEvent{}
+class BorrarUltimoNumero extends CalculadoraEventos{}
 
-class OperacionCalc extends CalculatorEvent{
+class OperacionCalc extends CalculadoraEventos{
   final String operation;
 
   OperacionCalc(this.operation);
 }
 
-class OperacionHistorial extends CalculatorEvent{
+class OperacionHistorial extends CalculadoraEventos{
   final String num1;
   final String num2;
-  final String operation;
+  final String operacion;
   final String res;
 
-  OperacionHistorial(this.num1, this.num2, this.operation, this.res);
+  OperacionHistorial(this.num1, this.num2, this.operacion, this.res);
 }
 
-class ResultadoCalcu extends CalculatorEvent{
+class ResultadoCalcu extends CalculadoraEventos{
   bool selectHistorial = false;
 
   ResultadoCalcu(this.selectHistorial);
