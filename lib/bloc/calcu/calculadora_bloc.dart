@@ -41,9 +41,16 @@ class CalculadoraBloc extends Bloc<CalculadoraEventos, CalculadoraEstado> {
     //Borrar ultimo digito
     else if (event is BorrarUltimoNumero) {
       yield state.copyWith(
-        mathResult: state.resultado.length > 1
-            ? state.resultado.substring(0, state.resultado.length -1)
-            : '0'
+        mathResult:
+        state.resultado.length > 1
+            ?
+              state.resultado.endsWith('.0')
+              ?
+                state.resultado.substring(0, state.resultado.length -2)
+              :
+                state.resultado.substring(0, state.resultado.length -1)
+            :
+              '0'
       );
     }
     //Operaciones Aritmeticas
