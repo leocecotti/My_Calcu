@@ -21,6 +21,7 @@ class ResultsLabels extends StatelessWidget {
           );
         }
 
+
         return Column(
           children: [
             SubResult(text: state.primerNum ),

@@ -25,9 +25,18 @@ class CalculadoraBloc extends Bloc<CalculadoraEventos, CalculadoraEstado> {
       //Agregar numeros
     } else if (event is AddNumber) {
       yield state.copyWith(
-        mathResult: (state.resultado == '0'
-        ? event.number
-        : state.resultado + event.number)
+        mathResult:
+        (state.resultado == '0'
+        ?
+          (
+            event.number == '.'
+          ?
+            event.number = '0'
+          :
+            event.number = event.number
+          )
+        :
+          state.resultado + event.number)
       );
     }
     //Camiar signo - a + y viceversa
@@ -92,6 +101,7 @@ class CalculadoraBloc extends Bloc<CalculadoraEventos, CalculadoraEstado> {
   Stream<CalculadoraEstado> _calculaResultado(bool selectHistorial) async*
   {
     final double num1 = double.parse(state.primerNum);
+
 
      double  segundoNum= 0;
     if(selectHistorial)

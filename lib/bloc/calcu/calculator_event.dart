@@ -6,7 +6,7 @@ abstract class CalculadoraEventos {}
 class ResetAC extends CalculadoraEventos{}
 
 class AddNumber extends CalculadoraEventos{
-  final String number;
+  String number;
   AddNumber(this.number);
 }
 
